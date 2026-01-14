@@ -1,0 +1,21 @@
+services:
+  workspace:
+    build:
+      context: .
+      dockerfile: Containerfile
+      args:
+          - USER=user
+          - UID=${UID:-1000}
+          - GID=${GID:-1000}
+    user: "${UID:-1000}:${GID:-1000}"
+    command: tail -f /dev/null
+    volumes:
+      - .:/home/user/sparsegemms    
+    deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 1
+                capabilities: [gpu]
+
